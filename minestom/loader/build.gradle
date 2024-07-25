@@ -1,0 +1,32 @@
+plugins {
+    alias(libs.plugins.shadow)
+}
+
+sourceCompatibility = 21
+targetCompatibility = 21
+
+dependencies {
+    compileOnly 'dev.hollowcube:minestom-ce-extensions:1.2.0'
+    compileOnly 'net.minestom:minestom-snapshots:1ef0e26da8'
+
+    implementation project(':api')
+    implementation project(':common:loader-utils')
+}
+
+processResources {
+    filesMatching("extension.json") {
+        expand 'extensionVersion': project.ext.fullVersion
+    }
+}
+
+shadowJar {
+    archiveFileName = "LuckPerms-Minestom-${project.ext.fullVersion}.jar"
+
+    from {
+        project(':minestom').tasks.shadowJar.archiveFile
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
